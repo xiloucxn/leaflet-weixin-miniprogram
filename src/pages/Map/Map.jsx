@@ -386,7 +386,7 @@ function Map(props) {
 
     const _onclickRouteNavigate = () => {
       if (!currentLocation) {
-        alert('请先获取当前位置！');
+        alert('信号不好，请先获取当前位置！');
         return;
       }
       const { accuracy, bounds, latlng, latitude, longitude, timestamp } =
@@ -402,7 +402,7 @@ function Map(props) {
     L.easyButton(
       '<span class="iconfont icon icon-luxian"></span>',
       function () {
-        alert('you just clicked the RouteNavigate button!');
+        console.log('you just clicked the RouteNavigate button!');
         _onclickRouteNavigate();
       }
     ).addTo(map);
