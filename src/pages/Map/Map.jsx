@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import L, { geoJSON, latLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import mapHelper from '../../util/mapHelper';
-import util from '../../util/util'
+import util from '../../util/util';
 import './Map.scss';
 import jquery from 'jquery';
 
@@ -17,15 +17,15 @@ import '../../components/leaflet.canvas-markers/leaflet.canvas-markers';
 import '../../components/Leaflet.curve-gh-pages/src/leaflet.curve';
 import '../../components/leaflet-locatecontrol/L.Control.Locate.scss';
 import '../../components/leaflet-locatecontrol/L.Control.Locate';
-import 'leaflet-easybutton'
+import 'leaflet-easybutton';
 import '../../components/css/easy-button.css';
 
 const mapName = `map-test`;
 var map;
 var layersControl;
 const $ = jquery;
-const locateData=[]
-var currentLocation=null;
+const locateData = [];
+var currentLocation = null;
 
 const publicUrl = process.env.PUBLIC_URL;
 function Map(props) {
@@ -58,10 +58,10 @@ function Map(props) {
     addAwesomeMarker();
 
     // 添加locatecontrol
-    addLocateControl()
+    addLocateControl();
 
     // 添加routeNavigate
-    addRouteNavigate()
+    addRouteNavigate();
 
     // 加载完成
     console.log('Map 初始化完成！');
@@ -97,62 +97,14 @@ function Map(props) {
   };
 
   const addCurve = () => {
+    const curveLG = L.layerGroup([]).addTo(map);
 
-    const curveLG=L.layerGroup([]).addTo(map)
-
-    layersControl.addOverlay(curveLG,'curveLG')
+    layersControl.addOverlay(curveLG, 'curveLG');
 
     //use a mix of renderers
     var customPane = map.createPane('customPane');
     var canvasRenderer = L.canvas({ pane: 'customPane' });
     customPane.style.zIndex = 399; // put just behind the standard overlay pane which is at 400
-
-    //quadratic bezier curve
-    var pathOne = L.curve(
-      [
-        'M',
-        [50.14874640066278, 14.106445312500002],
-        'Q',
-        [51.67255514839676, 16.303710937500004],
-        [50.14874640066278, 18.676757812500004],
-        'T',
-        [49.866316729538674, 25.0927734375],
-      ],
-      { animate: 3000, renderer: canvasRenderer }
-    ).addTo(curveLG);
-
-    //cubic bezier curve (and straight lines)
-    var pathTwo = L.curve(
-      [
-        'M',
-        [50.54136296522163, 28.520507812500004],
-        'C',
-        [52.214338608258224, 28.564453125000004],
-        [48.45835188280866, 33.57421875000001],
-        [50.680797145321655, 33.83789062500001],
-        'V',
-        [48.40003249610685],
-        'L',
-        [47.45839225859763, 31.201171875],
-        [48.40003249610685, 28.564453125000004],
-        'Z',
-        'M',
-        [49.55372551347579, 29.465332031250004],
-        'V',
-        [48.7822260446217],
-        'H',
-        [33.00292968750001],
-        'V',
-        [49.55372551347579],
-        'Z',
-      ],
-      {
-        color: 'red',
-        fill: true,
-        renderer: canvasRenderer,
-        animate: { delay: 500, duration: 10000, iterations: 113 },
-      }
-    ).addTo(curveLG);
 
     //动画面
     var path5 = L.curve(
@@ -194,6 +146,53 @@ function Map(props) {
       }
     ).addTo(curveLG);
 
+    //quadratic bezier curve
+    var pathOne = L.curve(
+      [
+        'M',
+        [50.14874640066278, 14.106445312500002],
+        'Q',
+        [51.67255514839676, 16.303710937500004],
+        [50.14874640066278, 18.676757812500004],
+        'T',
+        [49.866316729538674, 25.0927734375],
+      ],
+      { animate: 3000, renderer: canvasRenderer }
+    );
+
+    //cubic bezier curve (and straight lines)
+    var pathTwo = L.curve(
+      [
+        'M',
+        [50.54136296522163, 28.520507812500004],
+        'C',
+        [52.214338608258224, 28.564453125000004],
+        [48.45835188280866, 33.57421875000001],
+        [50.680797145321655, 33.83789062500001],
+        'V',
+        [48.40003249610685],
+        'L',
+        [47.45839225859763, 31.201171875],
+        [48.40003249610685, 28.564453125000004],
+        'Z',
+        'M',
+        [49.55372551347579, 29.465332031250004],
+        'V',
+        [48.7822260446217],
+        'H',
+        [33.00292968750001],
+        'V',
+        [49.55372551347579],
+        'Z',
+      ],
+      {
+        color: 'red',
+        fill: true,
+        renderer: canvasRenderer,
+        animate: { delay: 500, duration: 10000, iterations: 113 },
+      }
+    );
+
     var pathThree = L.curve(
       [
         'M',
@@ -212,7 +211,7 @@ function Map(props) {
         'Z',
       ],
       { fill: true, color: 'orange' }
-    ).addTo(curveLG);
+    );
 
     pathThree.on('click', function (e) {
       console.log('path three clicked');
@@ -229,7 +228,7 @@ function Map(props) {
         [46.6795944656402, -11.0302734375],
       ],
       { dashArray: '5', animate: { duration: 3000, iterations: Infinity } }
-    ).addTo(curveLG);
+    );
 
     var pathFive = L.curve(
       [
@@ -276,7 +275,7 @@ function Map(props) {
     layersControl.addOverlay(ciLayerLG, 'ciLayerLG');
 
     // 添加测试dom方法加载点位数据
-    const jsonLG = L.layerGroup([])
+    const jsonLG = L.layerGroup([]);
     layersControl.addOverlay(jsonLG, 'DOMLayer');
 
     ciLayer.addOnClickListener(function (e, data) {
@@ -299,7 +298,7 @@ function Map(props) {
         { icon: icon }
       ).bindPopup('I Am ' + i);
       markers.push(marker);
-      jsonLG.addLayer(marker)
+      jsonLG.addLayer(marker);
     }
     // ciLayer.addLayers(markers);
 
@@ -335,7 +334,7 @@ function Map(props) {
               'I Am ' + point.properties.工程名
             );
             markers.push(marker);
-            jsonLG.addLayer(marker)
+            jsonLG.addLayer(marker);
           },
         });
         ciLayer.addLayers(markers);
@@ -370,37 +369,44 @@ function Map(props) {
       .addTo(map);
   };
 
-  const addLocateControl=()=>{
+  const addLocateControl = () => {
     L.control.locate().addTo(map);
-    const _onlocationFound=(e)=>{
+    const _onlocationFound = (e) => {
       // console.log('_onlocationFound',e);
-      const {accuracy,bounds,latlng,latitude,longitude,timestamp}=e
-      currentLocation=e
-      locateData.push(e)
-    }
-    map.on('locationfound',_onlocationFound)
-  }
+      const { accuracy, bounds, latlng, latitude, longitude, timestamp } = e;
+      currentLocation = e;
+      locateData.push(e);
+    };
+    map.on('locationfound', _onlocationFound);
+  };
 
-  const addRouteNavigate=()=>{
-    const lat=23,long=113
+  const addRouteNavigate = () => {
+    const lat = 23,
+      long = 113;
 
-    const _onclickRouteNavigate=()=>{
-      
-      if(!currentLocation){
-        alert('请先获取当前位置！')
+    const _onclickRouteNavigate = () => {
+      if (!currentLocation) {
+        alert('请先获取当前位置！');
         return;
       }
-      const {accuracy,bounds,latlng,latitude,longitude,timestamp}=currentLocation
+      const { accuracy, bounds, latlng, latitude, longitude, timestamp } =
+        currentLocation;
       // wgs84转百度坐标
-      const bdLocation = util.wgs84toBd09LatLng({lat:latitude,lng:longitude})
-      const url=`bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`
-    }
-    
-    L.easyButton( '<span class="iconfont icon icon-luxian"></span>', function(){
-      alert('you just clicked the RouteNavigate button!');
-      _onclickRouteNavigate()
-    }).addTo(map);
-    
+      const bdLocation = util.wgs84toBd09LatLng({
+        lat: latitude,
+        lng: longitude,
+      });
+      const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+    };
+
+    L.easyButton(
+      '<span class="iconfont icon icon-luxian"></span>',
+      function () {
+        alert('you just clicked the RouteNavigate button!');
+        _onclickRouteNavigate();
+      }
+    ).addTo(map);
+
     const navigate = (v1) => {
       if (v1) {
         const v2 = bd09togcj02LatLng(v1);
@@ -408,25 +414,25 @@ function Map(props) {
         const url2 = `bdapp://map/direction?destination=${v1.lat},${v1.lng}`;
         operation([
           {
-            text: "高德地图",
+            text: '高德地图',
             onPress: () => {
-              console.log("高德地图", url1);
+              console.log('高德地图', url1);
               window.open(url1);
             },
           },
           {
-            text: "百度地图",
+            text: '百度地图',
             onPress: () => {
-              console.log("百度地图", url2);
+              console.log('百度地图', url2);
               window.open(url2);
             },
           },
         ]);
       } else {
-        Toast.info("未发现目的地位置点！");
+        Toast.info('未发现目的地位置点！');
       }
     };
-  }
+  };
 
   return (
     <div
