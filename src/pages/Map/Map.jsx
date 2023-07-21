@@ -89,6 +89,11 @@ function Map(props) {
   };
 
   const addCurve = () => {
+
+    const curveLG=L.layerGroup([]).addTo(map)
+
+    layersControl.addOverlay(curveLG,'curveLG')
+
     //use a mix of renderers
     var customPane = map.createPane('customPane');
     var canvasRenderer = L.canvas({ pane: 'customPane' });
@@ -106,7 +111,7 @@ function Map(props) {
         [49.866316729538674, 25.0927734375],
       ],
       { animate: 3000, renderer: canvasRenderer }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     //cubic bezier curve (and straight lines)
     var pathTwo = L.curve(
@@ -139,7 +144,7 @@ function Map(props) {
         renderer: canvasRenderer,
         animate: { delay: 500, duration: 10000, iterations: 113 },
       }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     //动画面
     var path5 = L.curve(
@@ -162,7 +167,7 @@ function Map(props) {
         renderer: canvasRenderer,
         animate: { delay: 300, duration: 10000, iterations: 113 },
       }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     // 动画线
     var path6 = L.curve(
@@ -179,7 +184,7 @@ function Map(props) {
         animate: { delay: 300, duration: 5000, iterations: 113 },
         renderer: canvasRenderer,
       }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     var pathThree = L.curve(
       [
@@ -199,7 +204,7 @@ function Map(props) {
         'Z',
       ],
       { fill: true, color: 'orange' }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     pathThree.on('click', function (e) {
       console.log('path three clicked');
@@ -216,7 +221,7 @@ function Map(props) {
         [46.6795944656402, -11.0302734375],
       ],
       { dashArray: '5', animate: { duration: 3000, iterations: Infinity } }
-    ).addTo(map);
+    ).addTo(curveLG);
 
     var pathFive = L.curve(
       [
