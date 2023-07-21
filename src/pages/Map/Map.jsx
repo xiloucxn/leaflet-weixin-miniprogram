@@ -381,22 +381,26 @@ function Map(props) {
   };
 
   const addRouteNavigate = () => {
-    const lat = 23,
-      long = 113;
+    // 中山纪念堂
+    const lat = 23.136137424695043, 
+      lng = 113.25936555862428;
 
     const _onclickRouteNavigate = () => {
-      if (!currentLocation) {
-        alert('信号不好，请先获取当前位置！');
-        return;
-      }
-      const { accuracy, bounds, latlng, latitude, longitude, timestamp } =
-        currentLocation;
-      // wgs84转百度坐标
+      // if (!currentLocation) {
+      //   alert('信号不好，请先获取当前位置！');
+      //   return;
+      // }
+      // const { accuracy, bounds, latlng, latitude, longitude, timestamp } =
+      //   currentLocation;
+      // // wgs84转百度坐标
       const bdLocation = util.wgs84toBd09LatLng({
-        lat: latitude,
-        lng: longitude,
+        lat,
+        lng,
       });
-      const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+      // const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+      // const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+      const url = `bdapp://map/direction?destination=${lat},${lng}`;
+      window.open(url);
     };
 
     L.easyButton(
