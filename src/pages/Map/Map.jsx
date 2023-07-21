@@ -14,6 +14,8 @@ import '../../components/Leaflet.awesome-markers/leaflet.awesome-markers.css';
 import '../../components/Leaflet.awesome-markers/leaflet.awesome-markers';
 import '../../components/leaflet.canvas-markers/leaflet.canvas-markers';
 import '../../components/Leaflet.curve-gh-pages/src/leaflet.curve';
+import '../../components/leaflet-locatecontrol/L.Control.Locate.scss';
+import '../../components/leaflet-locatecontrol/L.Control.Locate';
 
 const mapName = `map-test`;
 var map;
@@ -49,6 +51,9 @@ function Map(props) {
 
     // 添加awesomeMarker
     addAwesomeMarker();
+
+    // 添加locatecontrol
+    addLocateControl()
 
     // 加载完成
     console.log('Map 初始化完成！');
@@ -351,6 +356,10 @@ function Map(props) {
       .bindPopup('我是iconfont的icon绘制自定义颜色的marker！')
       .addTo(map);
   };
+
+  const addLocateControl=()=>{
+    L.control.locate().addTo(map);
+  }
 
   return (
     <div
