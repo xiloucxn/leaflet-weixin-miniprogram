@@ -20,6 +20,7 @@ var map;
 var layersControl;
 const $ = jquery;
 
+const publicUrl = process.env.PUBLIC_URL;
 function Map(props) {
   useEffect(() => {
     map = L.map(mapName, { center: [23, 113], minNativeZoom: 1, zoom: 8 });
@@ -268,7 +269,7 @@ function Map(props) {
     });
 
     var icon = L.icon({
-      iconUrl: 'img/pothole.png',
+      iconUrl: publicUrl + '/img/pothole.png',
       iconSize: [20, 18],
       iconAnchor: [10, 9],
     });
@@ -308,7 +309,7 @@ function Map(props) {
             // );
             // return awesomMarker({ latLng, icon: "icon-gaozhongliuxue" });
             let icon = L.icon({
-              iconUrl: 'img/控制点.png',
+              iconUrl: publicUrl + '/img/控制点.png',
               iconSize: [20, 18],
               iconAnchor: [10, 9],
             });
