@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import L, { geoJSON, latLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import mapHelper from '../../util/mapHelper';
+import util from '../../util/util'
 import './Map.scss';
 import jquery from 'jquery';
 
@@ -16,11 +17,15 @@ import '../../components/leaflet.canvas-markers/leaflet.canvas-markers';
 import '../../components/Leaflet.curve-gh-pages/src/leaflet.curve';
 import '../../components/leaflet-locatecontrol/L.Control.Locate.scss';
 import '../../components/leaflet-locatecontrol/L.Control.Locate';
+import 'leaflet-easybutton'
+import '../../components/css/easy-button.css';
 
 const mapName = `map-test`;
 var map;
 var layersControl;
 const $ = jquery;
+const locateData=[]
+var currentLocation=null;
 
 const publicUrl = process.env.PUBLIC_URL;
 function Map(props) {
@@ -54,6 +59,9 @@ function Map(props) {
 
     // 添加locatecontrol
     addLocateControl()
+
+    // 添加routeNavigate
+    addRouteNavigate()
 
     // 加载完成
     console.log('Map 初始化完成！');
@@ -364,6 +372,60 @@ function Map(props) {
 
   const addLocateControl=()=>{
     L.control.locate().addTo(map);
+    const _onlocationFound=(e)=>{
+      // console.log('_onlocationFound',e);
+      const {accuracy,bounds,latlng,latitude,longitude,timestamp}=e
+      currentLocation=e
+      locateData.push(e)
+    }
+    map.on('locationfound',_onlocationFound)
+  }
+
+  const addRouteNavigate=()=>{
+    const lat=23,long=113
+
+    const _onclickRouteNavigate=()=>{
+      
+      if(!currentLocation){
+        alert('请先获取当前位置！')
+        return;
+      }
+      const {accuracy,bounds,latlng,latitude,longitude,timestamp}=currentLocation
+      // wgs84转百度坐标
+      const bdLocation = util.wgs84toBd09LatLng({lat:latitude,lng:longitude})
+      const url=`bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`
+    }
+    
+    L.easyButton( '<span class="iconfont icon icon-luxian"></span>', function(){
+      alert('you just clicked the RouteNavigate button!');
+      _onclickRouteNavigate()
+    }).addTo(map);
+    
+    const navigate = (v1) => {
+      if (v1) {
+        const v2 = bd09togcj02LatLng(v1);
+        const url1 = `androidamap://navi?lat=${v2.lat}&lon=${v2.lng}`;
+        const url2 = `bdapp://map/direction?destination=${v1.lat},${v1.lng}`;
+        operation([
+          {
+            text: "高德地图",
+            onPress: () => {
+              console.log("高德地图", url1);
+              window.open(url1);
+            },
+          },
+          {
+            text: "百度地图",
+            onPress: () => {
+              console.log("百度地图", url2);
+              window.open(url2);
+            },
+          },
+        ]);
+      } else {
+        Toast.info("未发现目的地位置点！");
+      }
+    };
   }
 
   return (
