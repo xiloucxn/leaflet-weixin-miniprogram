@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import L, { geoJSON, latLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import mapHelper from '../../util/mapHelper';
+import util from '../../util/util';
 import './Map.scss';
 import jquery from 'jquery';
 
@@ -14,11 +15,17 @@ import '../../components/Leaflet.awesome-markers/leaflet.awesome-markers.css';
 import '../../components/Leaflet.awesome-markers/leaflet.awesome-markers';
 import '../../components/leaflet.canvas-markers/leaflet.canvas-markers';
 import '../../components/Leaflet.curve-gh-pages/src/leaflet.curve';
+import '../../components/leaflet-locatecontrol/L.Control.Locate.scss';
+import '../../components/leaflet-locatecontrol/L.Control.Locate';
+import 'leaflet-easybutton';
+import '../../components/css/easy-button.css';
 
 const mapName = `map-test`;
 var map;
 var layersControl;
 const $ = jquery;
+const locateData = [];
+var currentLocation = null;
 
 const publicUrl = process.env.PUBLIC_URL;
 function Map(props) {
@@ -49,6 +56,17 @@ function Map(props) {
 
     // 添加awesomeMarker
     addAwesomeMarker();
+
+    // 添加locatecontrol
+    addLocateControl();
+
+    // 添加routeNavigate
+    addRouteNavigate();
+
+    // 添加homeButton
+    addHomeButton()
+
+    map.defaultBounds=mapHelper.gdBounds;
 
     // 加载完成
     console.log('Map 初始化完成！');
@@ -84,10 +102,54 @@ function Map(props) {
   };
 
   const addCurve = () => {
+    const curveLG = L.layerGroup([]).addTo(map);
+
+    layersControl.addOverlay(curveLG, 'curveLG');
+
     //use a mix of renderers
     var customPane = map.createPane('customPane');
     var canvasRenderer = L.canvas({ pane: 'customPane' });
     customPane.style.zIndex = 399; // put just behind the standard overlay pane which is at 400
+
+    //动画面
+    var path5 = L.curve(
+      [
+        'M',
+        [23.548880923858757, 113.7139892578125],
+        'C',
+        [23.669681880942314, 113.82385253906251],
+        [23.427968862308678, 114.08752441406251],
+        [23.553916518321625, 114.25231933593751],
+        'L',
+        [23.120153621695614, 114.26879882812501],
+        [22.902743425252357, 113.96118164062501],
+        [23.14541110372829, 113.64807128906251],
+        'Z',
+      ],
+      {
+        color: 'red',
+        fill: true,
+        renderer: canvasRenderer,
+        animate: { delay: 300, duration: 10000, iterations: 113 },
+      }
+    ).addTo(curveLG);
+
+    // 动画线
+    var path6 = L.curve(
+      [
+        'M',
+        [23.599228183239397, 112.18139648437501],
+        'Q',
+        [23.77026416023979, 112.45056152343751],
+        [23.473323877771172, 112.67578125],
+        'T',
+        [23.624394569716923, 112.93945312500001],
+      ],
+      {
+        animate: { delay: 300, duration: 5000, iterations: 113 },
+        renderer: canvasRenderer,
+      }
+    ).addTo(curveLG);
 
     //quadratic bezier curve
     var pathOne = L.curve(
@@ -101,7 +163,7 @@ function Map(props) {
         [49.866316729538674, 25.0927734375],
       ],
       { animate: 3000, renderer: canvasRenderer }
-    ).addTo(map);
+    );
 
     //cubic bezier curve (and straight lines)
     var pathTwo = L.curve(
@@ -134,47 +196,7 @@ function Map(props) {
         renderer: canvasRenderer,
         animate: { delay: 500, duration: 10000, iterations: 113 },
       }
-    ).addTo(map);
-
-    //动画面
-    var path5 = L.curve(
-      [
-        'M',
-        [23.548880923858757, 113.7139892578125],
-        'C',
-        [23.669681880942314, 113.82385253906251],
-        [23.427968862308678, 114.08752441406251],
-        [23.553916518321625, 114.25231933593751],
-        'L',
-        [23.120153621695614, 114.26879882812501],
-        [22.902743425252357, 113.96118164062501],
-        [23.14541110372829, 113.64807128906251],
-        'Z',
-      ],
-      {
-        color: 'red',
-        fill: true,
-        renderer: canvasRenderer,
-        animate: { delay: 300, duration: 10000, iterations: 113 },
-      }
-    ).addTo(map);
-
-    // 动画线
-    var path6 = L.curve(
-      [
-        'M',
-        [23.599228183239397, 112.18139648437501],
-        'Q',
-        [23.77026416023979, 112.45056152343751],
-        [23.473323877771172, 112.67578125],
-        'T',
-        [23.624394569716923, 112.93945312500001],
-      ],
-      {
-        animate: { delay: 300, duration: 5000, iterations: 113 },
-        renderer: canvasRenderer,
-      }
-    ).addTo(map);
+    );
 
     var pathThree = L.curve(
       [
@@ -194,7 +216,7 @@ function Map(props) {
         'Z',
       ],
       { fill: true, color: 'orange' }
-    ).addTo(map);
+    );
 
     pathThree.on('click', function (e) {
       console.log('path three clicked');
@@ -211,7 +233,7 @@ function Map(props) {
         [46.6795944656402, -11.0302734375],
       ],
       { dashArray: '5', animate: { duration: 3000, iterations: Infinity } }
-    ).addTo(map);
+    );
 
     var pathFive = L.curve(
       [
@@ -258,7 +280,7 @@ function Map(props) {
     layersControl.addOverlay(ciLayerLG, 'ciLayerLG');
 
     // 添加测试dom方法加载点位数据
-    const jsonLG = L.layerGroup([])
+    const jsonLG = L.layerGroup([]);
     layersControl.addOverlay(jsonLG, 'DOMLayer');
 
     ciLayer.addOnClickListener(function (e, data) {
@@ -281,7 +303,7 @@ function Map(props) {
         { icon: icon }
       ).bindPopup('I Am ' + i);
       markers.push(marker);
-      jsonLG.addLayer(marker)
+      jsonLG.addLayer(marker);
     }
     // ciLayer.addLayers(markers);
 
@@ -292,7 +314,7 @@ function Map(props) {
         extraClasses: 'iconfont',
         prefix: 'icon',
         icon: icon,
-        markerColor: 'green',
+        markerColor: 'red',
       });
       return L.marker(latLng, { icon: markerIcon });
     };
@@ -317,7 +339,7 @@ function Map(props) {
               'I Am ' + point.properties.工程名
             );
             markers.push(marker);
-            jsonLG.addLayer(marker)
+            jsonLG.addLayer(marker);
           },
         });
         ciLayer.addLayers(markers);
@@ -344,13 +366,93 @@ function Map(props) {
       extraClasses: 'iconfont',
       prefix: 'icon',
       icon: 'icon-yiyuan',
-      markerColor: 'green',
+      markerColor: '#37373D',
     });
 
     L.marker([23, 113], { icon: redMarker })
       .bindPopup('我是iconfont的icon绘制自定义颜色的marker！')
       .addTo(map);
   };
+
+  const addLocateControl = () => {
+    L.control.locate().addTo(map);
+    const _onlocationFound = (e) => {
+      // console.log('_onlocationFound',e);
+      const { accuracy, bounds, latlng, latitude, longitude, timestamp } = e;
+      currentLocation = e;
+      locateData.push(e);
+    };
+    map.on('locationfound', _onlocationFound);
+  };
+
+  const addRouteNavigate = () => {
+    // 中山纪念堂
+    const lat = 23.136137424695043, 
+      lng = 113.25936555862428;
+
+    const _onclickRouteNavigate = () => {
+      // if (!currentLocation) {
+      //   alert('信号不好，请先获取当前位置！');
+      //   return;
+      // }
+      // const { accuracy, bounds, latlng, latitude, longitude, timestamp } =
+      //   currentLocation;
+      // // wgs84转百度坐标
+      const bdLocation = util.wgs84toBd09LatLng({
+        lat,
+        lng,
+      });
+      // const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+      // const url = `bdapp://map/direction?destination=${bdLocation.lat},${bdLocation.lng}`;
+      const url = `bdapp://map/direction?destination=${lat},${lng}`;
+      window.open(url);
+    };
+
+    L.easyButton(
+      '<span class="iconfont icon icon-luxian"></span>',
+      function () {
+        console.log('you just clicked the RouteNavigate button!');
+        _onclickRouteNavigate();
+      }
+    ).addTo(map);
+
+    const navigate = (v1) => {
+      if (v1) {
+        const v2 = bd09togcj02LatLng(v1);
+        const url1 = `androidamap://navi?lat=${v2.lat}&lon=${v2.lng}`;
+        const url2 = `bdapp://map/direction?destination=${v1.lat},${v1.lng}`;
+        operation([
+          {
+            text: '高德地图',
+            onPress: () => {
+              console.log('高德地图', url1);
+              window.open(url1);
+            },
+          },
+          {
+            text: '百度地图',
+            onPress: () => {
+              console.log('百度地图', url2);
+              window.open(url2);
+            },
+          },
+        ]);
+      } else {
+        Toast.info('未发现目的地位置点！');
+      }
+    };
+  };
+
+  const  addHomeButton =()=>{
+    L.easyButton(
+      '<span class="iconfont icon icon-home1"></span>',
+      function () {
+        console.log('you just clicked the Home button!');
+        // _onclickRouteNavigate();
+        map.defaultBounds&&map.fitBounds(map.defaultBounds)
+      }
+    ).addTo(map);
+  }
 
   return (
     <div
