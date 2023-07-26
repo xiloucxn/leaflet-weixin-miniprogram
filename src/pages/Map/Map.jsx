@@ -63,6 +63,11 @@ function Map(props) {
     // 添加routeNavigate
     addRouteNavigate();
 
+    // 添加homeButton
+    addHomeButton()
+
+    map.defaultBounds=mapHelper.gdBounds;
+
     // 加载完成
     console.log('Map 初始化完成！');
 
@@ -309,7 +314,7 @@ function Map(props) {
         extraClasses: 'iconfont',
         prefix: 'icon',
         icon: icon,
-        markerColor: 'green',
+        markerColor: 'red',
       });
       return L.marker(latLng, { icon: markerIcon });
     };
@@ -361,7 +366,7 @@ function Map(props) {
       extraClasses: 'iconfont',
       prefix: 'icon',
       icon: 'icon-yiyuan',
-      markerColor: 'green',
+      markerColor: '#37373D',
     });
 
     L.marker([23, 113], { icon: redMarker })
@@ -437,6 +442,17 @@ function Map(props) {
       }
     };
   };
+
+  const  addHomeButton =()=>{
+    L.easyButton(
+      '<span class="iconfont icon icon-home1"></span>',
+      function () {
+        console.log('you just clicked the Home button!');
+        // _onclickRouteNavigate();
+        map.defaultBounds&&map.fitBounds(map.defaultBounds)
+      }
+    ).addTo(map);
+  }
 
   return (
     <div
