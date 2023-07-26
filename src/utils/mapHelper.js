@@ -3,6 +3,8 @@ import L from "leaflet";
 import "leaflet.vectorgrid"; //矢量瓦片
 import * as qs from "qs";
 import jQuery from "jquery";
+import httpUrl from "../httpUrl";
+import config from "../config";
 
 const $ = jQuery;
 
@@ -17,7 +19,7 @@ var locationMap = null; //定位小地图
 var districtList = null;
 var accountDistrict = null;
 
-var config, httpUrl;
+// var config, httpUrl;
 
 //公共状态
 const gdBounds = L.latLngBounds([
