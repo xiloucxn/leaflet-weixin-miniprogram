@@ -1,9 +1,10 @@
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import * as turf from "@turf/turf";
-const wkx = require("wkx");
 import { default as proj4 } from "proj4";
 import { message } from "antd";
+
+var parse = require('wellknown');
 
 export function deepCopyGeojson(geojson) {
   // 将 GeoJSON 对象转换为字符串
@@ -120,7 +121,8 @@ export function objToFeature(obj = {}) {
 }
 
 export function wktToGeoJSON(wktString) {
-  return wkx.Geometry.parse(wktString).toGeoJSON();
+    // 返回GeoJSON对象
+    return parse(wktString);
 }
 
 export function geoJSONToWkt(geojsonGeometry) {
