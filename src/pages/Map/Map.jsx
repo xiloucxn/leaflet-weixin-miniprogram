@@ -494,9 +494,9 @@ function Map(props) {
                      <div>
                        <strong>${name}</strong><br/>
                        图形面积:${valid(areaTurf)}公顷<br/>
-                       行政区代码:${valid(code)}公顷<br/>
-                       id:${valid(id)}公顷<br/>
-                       父级id:${valid(parentId)}公顷<br/>
+                       行政区代码:${valid(code)}<br/>
+                       id:${valid(id)}<br/>
+                       父级id:${valid(parentId)}<br/>
                        <a class='js-locate'>定位</a>
                      </div>`;
         // 定位按钮
