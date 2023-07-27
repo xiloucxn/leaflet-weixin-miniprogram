@@ -1,17 +1,33 @@
 {
   "files": {
-    "main.css": "./static/css/main.639e0acb.css",
-    "main.js": "./static/js/main.f78deadc.js",
+    "main.css": "./static/css/main.0a157f91.css",
+    "main.js": "./static/js/main.e6c5774c.js",
     "static/js/787.28cb0dcd.chunk.js": "./static/js/787.28cb0dcd.chunk.js",
     "static/media/markers-soft@2x.png": "./static/media/markers-soft@2x.050b2167d387021fb8ba.png",
     "static/media/markers-soft.png": "./static/media/markers-soft.cdc0e07beba6866bb977.png",
+    "static/media/Scissors.svg": "./static/media/Scissors.56cc16b82232f3a5bf5f.svg",
+    "static/media/Circle.svg": "./static/media/Circle.d185ac25fef15a581abf.svg",
+    "static/media/Rectangle.svg": "./static/media/Rectangle.d674a405e39e154ecc25.svg",
+    "static/media/Rotate.svg": "./static/media/Rotate.e170c5eb871ac7a20adb.svg",
+    "static/media/Polygon.svg": "./static/media/Polygon.df72f56645efbfa08ac3.svg",
+    "static/media/toggle.svg": "./static/media/toggle.4cb77f5b444ed35e8e2e.svg",
+    "static/media/Edit_Vertex.svg": "./static/media/Edit_Vertex.292a7d22130a834027c2.svg",
+    "static/media/Magnet.svg": "./static/media/Magnet.39aa3fe1f969b46e0b2e.svg",
+    "static/media/Marker.svg": "./static/media/Marker.c4c990fd529c8fd33dd5.svg",
+    "static/media/Eraser.svg": "./static/media/Eraser.60b35a437a71618326f8.svg",
+    "static/media/Line.svg": "./static/media/Line.3dbb0b8285eb418d6acf.svg",
+    "static/media/Union.svg": "./static/media/Union.3f84c17d39abd6098f6f.svg",
     "index.html": "./index.html",
-    "main.639e0acb.css.map": "./static/css/main.639e0acb.css.map",
-    "main.f78deadc.js.map": "./static/js/main.f78deadc.js.map",
+    "static/media/Move.svg": "./static/media/Move.f8ea0be23e1b9254b715.svg",
+    "static/media/Text.svg": "./static/media/Text.508c8abf56db9e3f7917.svg",
+    "static/media/CircleMarker.svg": "./static/media/CircleMarker.051273d87915aa9605a5.svg",
+    "static/media/Util.Draw.less": "./static/media/Util.Draw.a4901aa97182c6ac000a.less",
+    "main.0a157f91.css.map": "./static/css/main.0a157f91.css.map",
+    "main.e6c5774c.js.map": "./static/js/main.e6c5774c.js.map",
     "787.28cb0dcd.chunk.js.map": "./static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.639e0acb.css",
-    "static/js/main.f78deadc.js"
+    "static/css/main.0a157f91.css",
+    "static/js/main.e6c5774c.js"
   ]
 }
